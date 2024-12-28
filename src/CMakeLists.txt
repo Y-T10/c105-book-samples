@@ -10,3 +10,4 @@ target_compile_definitions(
 )
 
 add_subdirectory(caps2lctrl)
+add_subdirectory(run-admin)

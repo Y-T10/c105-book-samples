@@ -13,6 +13,10 @@ target_sources(
     caps2lctrl PUBLIC
     main.cpp
 )
+target_link_options(
+    caps2lctrl PRIVATE
+    -static -static-libgcc -static-libstdc++
+)
 
 target_include_directories(
     caps2lctrl PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
