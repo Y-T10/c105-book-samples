@@ -8,3 +8,5 @@ target_compile_definitions(
     app_common_options INTERFACE
     win_common_options
 )
+
+add_subdirectory(caps2lctrl)
