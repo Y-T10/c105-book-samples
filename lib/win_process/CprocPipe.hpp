@@ -1,7 +1,6 @@
 #pragma once
 
 #include "win_string.hpp"
-#include "CproHandle.hpp"
 
 #include <cstdint>
 #include <expected>
