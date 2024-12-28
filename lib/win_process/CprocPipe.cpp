@@ -55,9 +55,9 @@ namespace CmpProc {
         return Prefix + Name.substr(0, Name.size() - Prefix.size() - 1);
     }
 
-    const std::expected<object_handle, DWORD> CreatePipe(const CompReg::win32str& name, const size_t bufferSize) noexcept {
+    const HANDLE CreatePipe(const CompReg::win32str& name, const size_t bufferSize) noexcept {
         const DWORD PipeMode = PIPE_TYPE_BYTE | PIPE_READMODE_BYTE |  PIPE_WAIT | PIPE_REJECT_REMOTE_CLIENTS;
-        const auto Handle = CreateNamedPipe(
+        return CreateNamedPipe(
             name.c_str(),
             PIPE_ACCESS_OUTBOUND,
             PipeMode,
@@ -67,27 +67,22 @@ namespace CmpProc {
             0,
             NULL
         );
-
-        if(Handle == INVALID_HANDLE_VALUE) {
-            return std::unexpected(GetLastError());
-        }
-        return object_handle(const_cast<HANDLE>(Handle));
     }
 
-    const std::expected<void, DWORD> WritePipe(const object_handle& handle, const std::vector<uint8_t>& byte) noexcept {
+    const std::expected<void, DWORD> WritePipe(const HANDLE& handle, const std::vector<uint8_t>& byte) noexcept {
         DWORD writtenSize = 0;
-        if (WriteFile(handle.get(), byte.data(), byte.size(), &writtenSize, nullptr)) {
+        if (WriteFile(handle, byte.data(), byte.size(), &writtenSize, nullptr)) {
             return std::expected<void, DWORD>();
         }
         return std::unexpected(GetLastError());
     }
 
-    const std::expected<std::vector<uint8_t>, DWORD> ReadPipe(const object_handle& handle) noexcept {
+    const std::expected<std::vector<uint8_t>, DWORD> ReadPipe(const HANDLE& handle) noexcept {
         std::vector<uint8_t> data = {};
 
         for(DWORD readSize = 0; true; readSize = 0) {
             auto buff = std::array<uint8_t, 256>{};       
-            if (!ReadFile(handle.get(), buff.data(), buff.size(), &readSize, nullptr)) {
+            if (!ReadFile(handle, buff.data(), buff.size(), &readSize, nullptr)) {
                 return std::unexpected{GetLastError()};
             }
             if (readSize == 0) {

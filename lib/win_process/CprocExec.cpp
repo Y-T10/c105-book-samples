@@ -1,7 +1,7 @@
 #include "CprocExec.hpp"
 
 namespace CmpProc {
-    const std::expected<object_handle, DWORD> ExecElevated(bool isShow, const CompReg::win32str& execPath, const CompReg::win32str& param) noexcept {
+    const HANDLE ExecElevated(const CompReg::win32str& execPath, const CompReg::win32str& param, const bool isShow) noexcept {
         const SHELLEXECUTEINFO info = {
             .cbSize = sizeof(SHELLEXECUTEINFO),
             .fMask = SEE_MASK_DEFAULT | SEE_MASK_NOCLOSEPROCESS,
@@ -20,17 +20,17 @@ namespace CmpProc {
         };
 
         if (ShellExecuteEx(const_cast<SHELLEXECUTEINFO*>(&info))) {
-            return object_handle(info.hProcess);
+            return info.hProcess;
         }
-        return std::unexpected(GetLastError());
+        return nullptr;
     }
 
-    const std::expected<DWORD, DWORD> WaitUntilExit(const object_handle& handle) noexcept {
+    const std::expected<DWORD, DWORD> WaitUntilExit(const HANDLE& handle) noexcept {
         // プログラムの終了を待つ
-        WaitForSingleObject(handle.get(), INFINITE);
+        WaitForSingleObject(handle, INFINITE);
 
         // プログラムの終了コードを取得する．
-        if (DWORD code = 0; GetExitCodeProcess(handle.get(), &code) != 0) {
+        if (DWORD code = 0; GetExitCodeProcess(handle, &code) != 0) {
             return std::expected<DWORD, DWORD>(code);
         }
         return std::unexpected(GetLastError());
