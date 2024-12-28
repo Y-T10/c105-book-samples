@@ -1,11 +1,9 @@
 #include "CregHandler.hpp"
 #include "win_string.hpp"
 
-using namespace CompReg;
-
 int main() {
     // キーの書込ハンドルを取得する
-    const win32str Path = TEXT("SYSTEM\\CurrentControlSet\\Control\\Keyboard Layout");
+    const CompReg::win32str Path = TEXT("SYSTEM\\CurrentControlSet\\Control\\Keyboard Layout");
     const auto Handle = CompReg::OpenRegKey(HKEY_LOCAL_MACHINE, Path, KEY_SET_VALUE);
 
     // ハンドルが有効かを調べる
