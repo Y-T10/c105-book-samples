@@ -22,17 +22,17 @@ namespace {
 
 namespace CompReg {
 #ifdef _WIN32
-    const RegKey OpenRegKey(const HKEY rootKey, const win32str& keyPath, const REGSAM access) noexcept {
+    const std::expected<RegKey, LSTATUS> OpenRegKey(const HKEY rootKey, const win32str& keyPath, const REGSAM access) noexcept {
         HKEY hkey = nullptr;
         // 読み取り専用のレジストリハンドラを得る
         const LSTATUS result = RegOpenKeyEx(
             rootKey, keyPath.c_str(),
             0, access, &hkey);
-        // ハンドラの取得に成功すればアドレスを返す
-        if (result == ERROR_SUCCESS) {
-            return RegKey(hkey);
+        // ハンドル取得に失敗したかを調べる
+        if (result != ERROR_SUCCESS) {
+            return std::unexpected { result } ;
         }
-        return nullptr;
+        return RegKey(hkey);
     }
 
     const std::optional<std::vector<uint8_t>> ReadKeyValueBin(const RegKey& key, const win32str& valueName) noexcept {

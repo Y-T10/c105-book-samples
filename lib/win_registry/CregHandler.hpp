@@ -3,6 +3,7 @@
 #include "win_string.hpp"
 
 #include <optional>
+#include <expected>
 #include <cstdint>
 #include <memory>
 #include <vector>
@@ -29,9 +30,9 @@ namespace CompReg {
      * @param rootKey 始点となるキー．
      * @param keyPath rootKey下のキーを指すパス
      * @param access キーを扱う際の権限
-     * @return 成功すればキーのハンドラを指すポインタ、失敗すればnullptrを返す．
+     * @return 成功すればキーのハンドラを指すポインタ、失敗すればエラーコードを返す．
      */
-    const RegKey OpenRegKey(const HKEY rootKey, const win32str& keyPath, const REGSAM access) noexcept;
+    const std::expected<RegKey, LSTATUS> OpenRegKey(const HKEY rootKey, const win32str& keyPath, const REGSAM access) noexcept;
 
     /**
      * @brief キーが持つバイナリ値を読み込む
