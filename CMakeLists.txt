@@ -4,3 +4,4 @@ project(game VERSION 1.0.0 LANGUAGES CXX)
 find_package(Threads REQUIRED)
 
 add_subdirectory(lib)
+add_subdirectory(src)
