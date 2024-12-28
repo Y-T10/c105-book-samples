@@ -69,12 +69,12 @@ namespace CmpProc {
         );
     }
 
-    const std::expected<void, DWORD> WritePipe(const HANDLE& handle, const std::vector<uint8_t>& byte) noexcept {
+    const DWORD WritePipe(const HANDLE& handle, const std::vector<uint8_t>& byte) noexcept {
         DWORD writtenSize = 0;
-        if (WriteFile(handle, byte.data(), byte.size(), &writtenSize, nullptr)) {
-            return std::expected<void, DWORD>();
+        if (!!WriteFile(handle, byte.data(), byte.size(), &writtenSize, nullptr)) {
+            return GetLastError();
         }
-        return std::unexpected(GetLastError());
+        return ERROR_SUCCESS;
     }
 
     const std::expected<std::vector<uint8_t>, DWORD> ReadPipe(const HANDLE& handle) noexcept {

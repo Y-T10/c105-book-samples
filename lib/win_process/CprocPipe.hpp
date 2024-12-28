@@ -29,7 +29,7 @@ namespace CmpProc {
      * @param byte 書き込むデータ
      * @return 失敗した時のみエラーコードを返す
      */
-    const std::expected<void, DWORD> WritePipe(const HANDLE& handle, const std::vector<uint8_t>& byte) noexcept;
+    const DWORD WritePipe(const HANDLE& handle, const std::vector<uint8_t>& byte) noexcept;
 
     /**
      * @brief パイプからデータを読み込む
