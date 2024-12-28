@@ -47,8 +47,8 @@ namespace CompReg {
      * @param key キー
      * @param valueName 値の名前 
      * @param value 書き込む値
-     * @return 読み取りに成功すればバイナリ値を、失敗すればnulloptを返す．
+     * @return 読み取りに成功すれば0を、失敗すればエラーコードを返す．
      */
-    const bool WriteKeyValueBin(const RegKey& key, const win32str& valueName, const std::vector<uint8_t>& value) noexcept;
+    const LSTATUS WriteKeyValueBin(const RegKey& key, const win32str& valueName, const std::vector<uint8_t>& value) noexcept;
 #endif
 };
